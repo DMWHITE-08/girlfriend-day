@@ -13,14 +13,14 @@
 <body>
 
   <!-- ================= LOADING SCREEN ================= -->
-  <!-- Shown briefly while fonts/canvas warm up, then fades to reveal the hero. -->
   <div id="loadingScreen" class="loading-screen" role="status" aria-live="polite">
     <span class="loading-screen__heart" aria-hidden="true">❤</span>
     <p class="loading-screen__label">Loading a little surprise…</p>
   </div>
 
-  <!-- Cinematic background is now powered by assets/js/cinematic-bg.js -->
-  <!-- Legacy background canvases removed to avoid visual duplication. -->
+  <!-- Background canvases for galaxy, twinkling stars & shooting stars -->
+  <canvas id="galaxy-canvas"></canvas>
+  <canvas id="stars-canvas"></canvas>
 
   <!-- Ambient fireflies drifting over the starfield -->
   <div class="fireflies" id="fireflies" aria-hidden="true"></div>
@@ -57,7 +57,6 @@
 
   <!-- Background music -->
   <audio id="bgMusic" loop preload="none">
-    <!-- Placeholder: replace with the actual MP3 file -->
     <source src="assets/until-i-found-you-stephen-sanchez.mp3" type="audio/mpeg" />
   </audio>
 
@@ -186,9 +185,9 @@
         <svg viewBox="0 0 200 180" class="galaxy-heart__svg">
           <defs>
             <radialGradient id="heartGlow" cx="50%" cy="45%" r="70%">
-              <stop offset="0%" stop-color="#ff9fd6" />
-              <stop offset="45%" stop-color="#c084fc" />
-              <stop offset="100%" stop-color="#5b21b6" stop-opacity="0" />
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="45%" stop-color="#a855f7" />
+              <stop offset="100%" stop-color="#3b0764" stop-opacity="0" />
             </radialGradient>
           </defs>
           <path d="M100,175 C40,130 5,90 5,55 C5,25 28,5 55,5 C75,5 92,17 100,35 C108,17 125,5 145,5 C172,5 195,25 195,55 C195,90 160,130 100,175 Z" fill="url(#heartGlow)"/>
@@ -198,7 +197,7 @@
       <p class="finale__pretitle reveal-up">MAYBE THIS ISN'T OUR ENDING</p>
       <h2 class="finale__title reveal-up">Maybe&hellip;<br />it&rsquo;s only the beginning.</h2>
 
-      <p class="section__subtitle reveal-up">Whatever the future holds, I&rsquo;ll always be grateful that I met you. And if someday our paths become one&hellip; I&rsquo;ll be the happiest person[...]
+      <p class="section__subtitle reveal-up">Whatever the future holds, I&rsquo;ll always be grateful that I met you. And if someday our paths become one&hellip; I&rsquo;ll be the happiest person alive.</p>
       <p class="hero__subtitle reveal-up">I love you, Arlin. ❤️</p>
 
       <button id="finalCtaBtn" class="glow-btn glow-btn--large reveal-up" type="button">
@@ -218,10 +217,9 @@
 
   </main>
 
-  <!-- FX canvas (fireworks & confetti) kept — required for finale effects -->
+  <!-- FX canvas (fireworks & confetti) -->
   <canvas id="fx-canvas"></canvas>
 
-  <script type="module" src="assets/js/cinematic-bg.js"></script>
   <script src="script.js"></script>
 </body>
-  </html>
+</html>
