@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>A Little Surprise For You ❤️ — Albin &amp; Arlin</title>
+  <meta name="description" content="Every star reminds me of you. A heartfelt message for Arlin, written among the stars." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ================= LOADING SCREEN ================= -->
+  <!-- Shown briefly while fonts/canvas warm up, then fades to reveal the hero. -->
+  <div id="loadingScreen" class="loading-screen" role="status" aria-live="polite">
+    <span class="loading-screen__heart" aria-hidden="true">❤</span>
+    <p class="loading-screen__label">Loading a little surprise…</p>
+  </div>
+
+  <!-- ================= CANVAS LAYERS (galaxy / stars / shooting stars / particles) ================= -->
+  <canvas id="galaxy-canvas"></canvas>
+  <canvas id="stars-canvas"></canvas>
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- Ambient fireflies drifting over the starfield -->
+  <div class="fireflies" id="fireflies" aria-hidden="true"></div>
+
+  <!-- Desktop-only cursor glow -->
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <!-- ================= HERO / ENTRY GATE ================= -->
+  <section id="hero" class="hero">
+    <div class="hero__content">
+      <p class="eyebrow reveal-item">A LITTLE SURPRISE FOR YOU · 27 MAY</p>
+      <h1 class="hero__title reveal-item">
+        <span class="name">ALBIN</span>
+        <span class="heart-pulse" aria-hidden="true">❤️</span>
+        <span class="name">ARLIN</span>
+      </h1>
+      <p class="hero__subtitle reveal-item">Every star reminds me of you.</p>
+
+      <button id="beginBtn" class="glow-btn reveal-item" type="button">
+        <span class="glow-btn__label">Tap To Begin</span>
+        <span aria-hidden="true">❤️</span>
+      </button>
+
+      <p class="hero__hint reveal-item">Turn your sound on 🎧</p>
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true">
+      <span></span>
+      <p>scroll</p>
+    </div>
+  </section>
+
+  <!-- Background music -->
+  <audio id="bgMusic" loop preload="none">
+    <!-- Placeholder: replace with the actual MP3 file -->
+    <source src="assets/until-i-found-you-stephen-sanchez.mp3" type="audio/mpeg" />
+  </audio>
+
+  <button id="muteBtn" class="mute-btn" type="button" aria-label="Mute music" hidden>
+    <span id="muteIcon">🔊</span>
+  </button>
+
+  <!-- ================= MAIN CONTENT (revealed after tap) ================= -->
+  <main id="mainContent" class="main-content">
+
+    <!-- ================= GALLERY ================= -->
+    <section id="gallery" class="section gallery-section">
+      <p class="section__eyebrow reveal-up">A COLLECTION</p>
+      <h2 class="section__title reveal-up">Moments Written In Starlight</h2>
+      <p class="section__subtitle reveal-up">Six little pieces of you ✨, floating among the stars.</p>
+
+      <div class="gallery" id="galleryGrid">
+        <button class="photo-frame reveal-up" data-index="0" style="--delay:0" aria-label="Open photo 1 full screen">
+          <img data-src="assets/photo1.jpg" alt="A memory with you — photo 1" class="lazy-photo" loading="lazy" />
+        </button>
+        <button class="photo-frame reveal-up" data-index="1" style="--delay:1" aria-label="Open photo 2 full screen">
+          <img data-src="assets/photo2.jpg" alt="A memory with you — photo 2" class="lazy-photo" loading="lazy" />
+        </button>
+        <button class="photo-frame reveal-up" data-index="2" style="--delay:2" aria-label="Open photo 3 full screen">
+          <img data-src="assets/photo3.jpg" alt="A memory with you — photo 3" class="lazy-photo" loading="lazy" />
+        </button>
+        <button class="photo-frame reveal-up" data-index="3" style="--delay:3" aria-label="Open photo 4 full screen">
+          <img data-src="assets/photo4.jpg" alt="A memory with you — photo 4" class="lazy-photo" loading="lazy" />
+        </button>
+        <button class="photo-frame reveal-up" data-index="4" style="--delay:4" aria-label="Open photo 5 full screen">
+          <img data-src="assets/photo5.jpg" alt="A memory with you — photo 5" class="lazy-photo" loading="lazy" />
+        </button>
+        <button class="photo-frame reveal-up" data-index="5" style="--delay:5" aria-label="Open photo 6 full screen">
+          <img data-src="assets/photo6.jpg" alt="A memory with you — photo 6" class="lazy-photo" loading="lazy" />
+        </button>
+      </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <button class="lightbox__close" id="lightboxClose" aria-label="Close photo">✕</button>
+      <img src="" alt="" id="lightboxImg" class="lightbox__img" />
+    </div>
+
+    <!-- ================= REASONS ================= -->
+    <section id="reasons" class="section reasons-section">
+      <p class="section__eyebrow reveal-up">IN NO PARTICULAR ORDER</p>
+      <h2 class="section__title reveal-up">Why You Mean So Much To Me 💜</h2>
+
+      <div class="reasons-grid">
+        <div class="reason-card reveal-up">
+          <span class="reason-card__icon">❤️</span>
+          <h3>Your Smile</h3>
+        </div>
+        <div class="reason-card reveal-up">
+          <span class="reason-card__icon">🌸</span>
+          <h3>Your Kindness</h3>
+        </div>
+        <div class="reason-card reveal-up">
+          <span class="reason-card__icon">✨</span>
+          <h3>Your Beautiful Heart</h3>
+        </div>
+        <div class="reason-card reveal-up">
+          <span class="reason-card__icon">🌙</span>
+          <h3>The Way You Make Me Happy</h3>
+        </div>
+        <div class="reason-card reveal-up">
+          <span class="reason-card__icon">🌌</span>
+          <h3>Every Moment With You</h3>
+        </div>
+        <div class="reason-card reveal-up">
+          <span class="reason-card__icon">💜</span>
+          <h3>Simply Being You</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= COUNTER ================= -->
+    <section id="counter" class="section counter-section">
+      <p class="section__eyebrow reveal-up">A Little Timeline ✨</p>
+      <h2 class="section__title reveal-up">Since I found the courage<br />to tell you how I feel&hellip;</h2>
+      <p class="section__subtitle reveal-up">27 May 2026</p>
+
+      <div class="counter-grid reveal-up">
+        <div class="counter-card">
+          <span class="counter-number" id="countDays">00</span>
+          <span class="counter-label">Days</span>
+        </div>
+        <div class="counter-card">
+          <span class="counter-number" id="countHours">00</span>
+          <span class="counter-label">Hours</span>
+        </div>
+        <div class="counter-card">
+          <span class="counter-number" id="countMinutes">00</span>
+          <span class="counter-label">Minutes</span>
+        </div>
+        <div class="counter-card">
+          <span class="counter-number" id="countSeconds">00</span>
+          <span class="counter-label">Seconds</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECRET LETTER ================= -->
+    <section id="letter" class="section letter-section">
+      <p class="section__eyebrow reveal-up">FOR YOUR EYES ONLY</p>
+      <h2 class="section__title reveal-up">A Secret Letter</h2>
+      <p class="section__subtitle reveal-up">Tap the envelope to open it.</p>
+
+      <div class="envelope-wrap reveal-up">
+        <button id="envelope" class="envelope" type="button" aria-label="Open the secret letter" aria-expanded="false" aria-controls="envelopeLetter">
+          <div class="envelope__back"></div>
+          <div class="envelope__letter" id="envelopeLetter" role="region" aria-label="Letter from Albin">
+            <p id="typewriterText" class="letter-text"></p>
+            <p class="letter-signature">— ALBIN ❤️</p>
+          </div>
+          <div class="envelope__flap"></div>
+          <div class="envelope__seal">❤️</div>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= FINALE ================= -->
+    <section id="finale" class="section finale-section">
+      <div class="galaxy-heart" id="galaxyHeart" aria-hidden="true">
+        <svg viewBox="0 0 200 180" class="galaxy-heart__svg">
+          <defs>
+            <radialGradient id="heartGlow" cx="50%" cy="45%" r="70%">
+              <stop offset="0%" stop-color="#ff9fd6" />
+              <stop offset="45%" stop-color="#c084fc" />
+              <stop offset="100%" stop-color="#5b21b6" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <path d="M100,175 C40,130 5,90 5,55 C5,25 28,5 55,5 C75,5 92,17 100,35 C108,17 125,5 145,5 C172,5 195,25 195,55 C195,90 160,130 100,175 Z" fill="url(#heartGlow)"/>
+        </svg>
+      </div>
+
+      <p class="finale__pretitle reveal-up">NO MATTER WHERE LIFE TAKES US</p>
+      <h2 class="finale__title reveal-up">I&rsquo;m grateful our paths crossed.<br />Maybe, when the time is right, we&rsquo;ll write the next chapter together.</h2>
+
+      <button id="finalCtaBtn" class="glow-btn glow-btn--large reveal-up" type="button">
+        <span class="glow-btn__label">One Step At A Time</span>
+        <span aria-hidden="true">❤️</span>
+      </button>
+
+      <p id="thankYouMessage" class="finale__thanks">Thank you for being part of my world.</p>
+
+      <footer class="footer">
+        <p>ALBIN <span aria-hidden="true">❤️</span> ARLIN &nbsp;·&nbsp; A Little Surprise For You</p>
+      </footer>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
