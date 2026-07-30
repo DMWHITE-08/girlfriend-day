@@ -6,10 +6,9 @@
 (() => {
   'use strict';
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
-  // Track tab visibility to save power & maintain 60 FPS target
+  // Track tab visibility to save power & maintain target frame rates
   let isTabActive = !document.hidden;
   document.addEventListener('visibilitychange', () => {
     isTabActive = !document.hidden;
@@ -111,7 +110,7 @@
     stars = Array.from({ length: count }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      r: Math.random() * 1.2 + 0.3,
+      r: Math.random() * 1.3 + 0.3,
       baseAlpha: Math.random() * 0.65 + 0.25,
       twinkleSpeed: Math.random() * 0.025 + 0.006,
       phase: Math.random() * Math.PI * 2,
@@ -145,22 +144,22 @@
   }
 
   /* ======================================================================
-     4. LAYER 2: ELEGANT LONG-TAIL SHOOTING STARS (Every ~3 seconds)
+     4. LAYER 2: ELEGANT LONG-TAIL SHOOTING STARS (Continuous Spawning)
      ====================================================================== */
   let shootingStars = [];
-  let lastShootingStarSpawn = 0;
+  let lastShootingStarSpawn = -3000;
 
   function spawnShootingStar(time) {
-    if (time - lastShootingStarSpawn < 2800) return;
-    lastShootingStarSpawn = time + (Math.random() * 600 - 300);
+    if (time - lastShootingStarSpawn < 2500) return;
+    lastShootingStarSpawn = time;
 
-    const isHero = Math.random() < 0.28;
-    const startX = Math.random() * (width * 0.8) + width * 0.1;
-    const startY = Math.random() * (height * 0.3) - 50;
+    const isHero = Math.random() < 0.32;
+    const startX = Math.random() * (width * 0.8) + width * 0.05;
+    const startY = Math.random() * (height * 0.35) - 30;
 
     const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.15;
-    const speed = isHero ? Math.random() * 4 + 14 : Math.random() * 4 + 9;
-    const tailLength = isHero ? Math.random() * 150 + 280 : Math.random() * 100 + 160;
+    const speed = isHero ? Math.random() * 4 + 13 : Math.random() * 4 + 9;
+    const tailLength = isHero ? Math.random() * 160 + 280 : Math.random() * 120 + 170;
 
     shootingStars.push({
       x: startX,
@@ -170,8 +169,35 @@
       angle,
       isHero,
       life: 1.0,
-      decay: isHero ? 0.009 : 0.014,
-      headRadius: isHero ? 2.5 : 1.6,
+      decay: isHero ? 0.008 : 0.013,
+      headRadius: isHero ? 2.8 : 1.8,
+      sparks: [],
+    });
+  }
+
+  function seedInitialShootingStars() {
+    shootingStars.push({
+      x: width * 0.25,
+      y: height * 0.1,
+      len: 220,
+      speed: 11,
+      angle: Math.PI / 3.8,
+      isHero: true,
+      life: 0.95,
+      decay: 0.009,
+      headRadius: 2.5,
+      sparks: [],
+    });
+    shootingStars.push({
+      x: width * 0.65,
+      y: height * 0.05,
+      len: 180,
+      speed: 9.5,
+      angle: Math.PI / 3.6,
+      isHero: false,
+      life: 0.85,
+      decay: 0.012,
+      headRadius: 1.8,
       sparks: [],
     });
   }
@@ -198,13 +224,13 @@
       const tailY = sh.y - Math.sin(sh.angle) * sh.len;
 
       const tailGrad = starsCtx.createLinearGradient(sh.x, sh.y, tailX, tailY);
-      tailGrad.addColorStop(0, `rgba(255, 255, 255, ${sh.life * 0.95})`);
-      tailGrad.addColorStop(0.12, `rgba(34, 211, 238, ${sh.life * 0.85})`);
-      tailGrad.addColorStop(0.4, `rgba(124, 58, 237, ${sh.life * 0.5})`);
-      tailGrad.addColorStop(0.75, `rgba(30, 58, 138, ${sh.life * 0.2})`);
+      tailGrad.addColorStop(0, `rgba(255, 255, 255, ${sh.life * 0.98})`);
+      tailGrad.addColorStop(0.15, `rgba(34, 211, 238, ${sh.life * 0.90})`);
+      tailGrad.addColorStop(0.45, `rgba(124, 58, 237, ${sh.life * 0.60})`);
+      tailGrad.addColorStop(0.80, `rgba(30, 58, 138, ${sh.life * 0.25})`);
       tailGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
-      starsCtx.lineWidth = sh.isHero ? 2.5 : 1.8;
+      starsCtx.lineWidth = sh.isHero ? 3.0 : 2.0;
       starsCtx.lineCap = 'round';
       starsCtx.strokeStyle = tailGrad;
       starsCtx.beginPath();
@@ -217,24 +243,24 @@
       starsCtx.fillStyle = `rgba(255, 255, 255, ${sh.life})`;
       starsCtx.fill();
 
-      const headGlow = starsCtx.createRadialGradient(sh.x, sh.y, 0, sh.x, sh.y, sh.headRadius * 6);
-      headGlow.addColorStop(0, `rgba(34, 211, 238, ${sh.life * 0.7})`);
-      headGlow.addColorStop(0.5, `rgba(124, 58, 237, ${sh.life * 0.3})`);
+      const headGlow = starsCtx.createRadialGradient(sh.x, sh.y, 0, sh.x, sh.y, sh.headRadius * 8);
+      headGlow.addColorStop(0, `rgba(34, 211, 238, ${sh.life * 0.85})`);
+      headGlow.addColorStop(0.45, `rgba(124, 58, 237, ${sh.life * 0.40})`);
       headGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
       starsCtx.beginPath();
-      starsCtx.arc(sh.x, sh.y, sh.headRadius * 6, 0, Math.PI * 2);
+      starsCtx.arc(sh.x, sh.y, sh.headRadius * 8, 0, Math.PI * 2);
       starsCtx.fillStyle = headGlow;
       starsCtx.fill();
 
-      if (sh.isHero && Math.random() < 0.6) {
+      if (sh.isHero && Math.random() < 0.65) {
         sh.sparks.push({
           x: sh.x - Math.cos(sh.angle) * (Math.random() * 15),
           y: sh.y - Math.sin(sh.angle) * (Math.random() * 15),
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: (Math.random() - 0.5) * 1.5,
+          vx: (Math.random() - 0.5) * 1.8,
+          vy: (Math.random() - 0.5) * 1.8,
           life: 1.0,
-          size: Math.random() * 1.5 + 0.8,
+          size: Math.random() * 1.8 + 0.9,
           color: Math.random() < 0.5 ? '#22D3EE' : '#C084FC',
         });
       }
@@ -267,10 +293,8 @@
     drawNebula(timestamp);
     drawStars(timestamp);
 
-    if (!reduceMotion) {
-      spawnShootingStar(timestamp);
-      updateAndDrawShootingStars();
-    }
+    spawnShootingStar(timestamp);
+    updateAndDrawShootingStars();
 
     requestAnimationFrame(mainAnimationLoop);
   }
@@ -278,14 +302,15 @@
   window.addEventListener('resize', () => {
     resizeCanvases();
   });
+
   resizeCanvases();
+  seedInitialShootingStars();
   requestAnimationFrame(mainAnimationLoop);
 
   /* ======================================================================
      6. AMBIENT FIREFLIES
      ====================================================================== */
   function spawnFireflies() {
-    if (reduceMotion) return;
     const container = document.getElementById('fireflies');
     if (!container) return;
     const count = width < 600 ? 8 : 14;
@@ -346,7 +371,7 @@
         loadingScreen.classList.add('is-hidden');
         loadingScreen.addEventListener('transitionend', () => loadingScreen.remove(), { once: true });
       }
-    }, reduceMotion ? 0 : remaining);
+    }, remaining);
   }
 
   if (document.readyState === 'complete') {
@@ -659,7 +684,7 @@ Thank you for hearing me out, then and now.`;
   }
 
   function celebrate() {
-    if (reduceMotion || !fxCtx) return;
+    if (!fxCtx) return;
     fxRunning = true;
 
     const bursts = [0.2, 0.5, 0.8, 0.35, 0.65];
