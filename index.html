@@ -19,10 +19,8 @@
     <p class="loading-screen__label">Loading a little surprise…</p>
   </div>
 
-  <!-- ================= CANVAS LAYERS (galaxy / stars / shooting stars / particles) ================= -->
-  <canvas id="galaxy-canvas"></canvas>
-  <canvas id="stars-canvas"></canvas>
-  <canvas id="fx-canvas"></canvas>
+  <!-- Cinematic background is now powered by assets/js/cinematic-bg.js -->
+  <!-- Legacy background canvases removed to avoid visual duplication. -->
 
   <!-- Ambient fireflies drifting over the starfield -->
   <div class="fireflies" id="fireflies" aria-hidden="true"></div>
@@ -219,6 +217,9 @@
     </section>
 
   </main>
+
+  <!-- FX canvas (fireworks & confetti) kept — required for finale effects -->
+  <canvas id="fx-canvas"></canvas>
 
   <script type="module" src="assets/js/cinematic-bg.js"></script>
   <script src="script.js"></script>
