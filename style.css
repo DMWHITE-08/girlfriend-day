@@ -15,7 +15,7 @@
   --accent-white: #FFFFFF;
   --accent-soft-white: #F0F4F8;
   --accent-cyan: #22D3EE;
-  --accent-cyan-glow: rgba(34, 211, 238, 0.35);
+  --accent-cyan-glow: rgba(34, 211, 238, 0.4);
   --accent-purple: #7C3AED;
   --accent-purple-deep: #4C1D95;
   --accent-blue: #2563EB;
@@ -28,16 +28,15 @@
   --text-muted: rgba(240, 244, 248, 0.42);
 
   /* Premium Glassmorphism */
-  --glass-bg: rgba(10, 10, 14, 0.35);
-  --glass-bg-hover: rgba(18, 18, 24, 0.50);
-  --glass-bg-strong: rgba(15, 15, 20, 0.70);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-border-hover: rgba(255, 255, 255, 0.18);
+  --glass-bg: rgba(12, 12, 18, 0.45);
+  --glass-bg-hover: rgba(20, 20, 28, 0.60);
+  --glass-bg-strong: rgba(18, 18, 25, 0.80);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-border-hover: rgba(255, 255, 255, 0.22);
   --glass-blur: 20px;
 
   /* Gradients */
   --gradient-title: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 35%, #A5F3FC 70%, #C084FC 100%);
-  --gradient-cyan-purple: linear-gradient(135deg, rgba(34, 211, 238, 0.25) 0%, rgba(124, 58, 237, 0.25) 100%);
   --gradient-btn: linear-gradient(135deg, #1E3A8A 0%, #7C3AED 50%, #06B6D4 100%);
 
   /* Typography */
@@ -64,7 +63,7 @@ html {
 }
 
 body {
-  background: var(--color-void);
+  background: transparent;
   color: var(--text-primary);
   font-family: var(--font-body);
   overflow-x: hidden;
@@ -91,38 +90,24 @@ a { color: inherit; }
   outline-offset: 5px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
 /* ---------- Background Canvas Layers ---------- */
 #galaxy-canvas, #stars-canvas, #fx-canvas {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
 }
-#galaxy-canvas { z-index: -3; }
-#stars-canvas { z-index: -2; }
-#fx-canvas { z-index: -1; }
 
-/* Base space background fallback */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -4;
-  background:
-    radial-gradient(ellipse 90% 70% at 20% 15%, rgba(124, 58, 237, 0.12), transparent 65%),
-    radial-gradient(ellipse 80% 60% at 85% 25%, rgba(34, 211, 238, 0.10), transparent 65%),
-    radial-gradient(ellipse 100% 80% at 50% 85%, rgba(30, 58, 138, 0.15), transparent 70%),
-    var(--color-void);
+/* Z-Index Hierarchy: Canvases placed above black html background & below text UI */
+#galaxy-canvas { z-index: 1; }
+#stars-canvas  { z-index: 2; }
+#fx-canvas     { z-index: 90; }
+
+/* ---------- UI Content Shells ---------- */
+.hero, .main-content, .mute-btn, .loading-screen, .cursor-glow, .fireflies {
+  position: relative;
+  z-index: 10;
 }
 
 /* ---------- Loading Screen ---------- */
@@ -160,7 +145,7 @@ body::before {
 .fireflies {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 5;
   pointer-events: none;
   overflow: hidden;
 }
@@ -191,7 +176,7 @@ body::before {
   border-radius: 50%;
   background: radial-gradient(circle, rgba(34, 211, 238, 0.08) 0%, rgba(124, 58, 237, 0.05) 40%, transparent 75%);
   pointer-events: none;
-  z-index: 2;
+  z-index: 6;
   transform: translate3d(-50%, -50%, 0);
   will-change: transform;
   display: none;
@@ -209,7 +194,6 @@ body::before {
   justify-content: center;
   text-align: center;
   padding: calc(var(--safe-top) + 32px) 24px calc(var(--safe-bottom) + 32px);
-  z-index: 1;
 }
 
 .hero__content {
@@ -401,7 +385,6 @@ body::before {
 /* ---------- Main Content ---------- */
 .main-content {
   position: relative;
-  z-index: 1;
   opacity: 0;
   visibility: hidden;
   transition: opacity 1.2s var(--ease-apple);
@@ -508,7 +491,6 @@ body::before {
 .photo-frame img.is-loaded { opacity: 1; }
 .photo-frame:hover img { transform: scale(1.15); }
 
-/* Placeholder preview */
 .photo-frame::after {
   content: "🌌";
   position: absolute;
@@ -819,4 +801,102 @@ body::before {
   color: var(--text-muted);
   margin-bottom: 10px;
 }
-.f
+.finale__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 5.2vw, 3.2rem);
+  line-height: 1.28;
+  max-width: 720px;
+  background: var(--gradient-title);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.finale__thanks {
+  margin-top: 28px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
+  color: var(--accent-cyan);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 1s var(--ease-apple), transform 1s var(--ease-apple);
+}
+.finale__thanks.is-shown {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer {
+  margin-top: 90px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* ---------- Floating Hearts (Finale) ---------- */
+.floating-heart {
+  position: fixed;
+  bottom: -40px;
+  font-size: 1.5rem;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.9;
+  animation: floatUp linear forwards;
+}
+@keyframes floatUp {
+  to {
+    transform: translateY(-115vh) translateX(var(--drift, 0px)) rotate(var(--spin, 20deg));
+    opacity: 0;
+  }
+}
+
+/* ---------- Touch Ripple ---------- */
+.ripple {
+  position: fixed;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 211, 238, 0.6);
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.35), transparent 70%);
+  pointer-events: none;
+  z-index: 300;
+  transform: translate(-50%, -50%) scale(0);
+  animation: rippleOut 0.75s var(--ease-soft) forwards;
+}
+@keyframes rippleOut {
+  to { transform: translate(-50%, -50%) scale(8); opacity: 0; }
+}
+
+/* =========================================================================
+   RESPONSIVE LAYOUT
+   ========================================================================= */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .gallery { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .reasons-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+  .section { padding: 90px 20px; }
+  .gallery { grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 40px; }
+  .reasons-grid { grid-template-columns: 1fr; gap: 14px; margin-top: 40px; }
+  .reason-card { padding: 30px 20px; }
+  .counter-grid { gap: 10px; margin-top: 36px; }
+  .counter-card { padding: 22px 8px; border-radius: 18px; }
+  .cursor-glow { display: none; }
+  .hero__content { gap: 16px; }
+}
+
+/* Small Screens */
+@media (max-width: 380px) {
+  .counter-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Landscape Phone */
+@media (max-height: 480px) and (orientation: landscape) {
+  .hero { min-height: 100vh; padding-top: 40px; padding-bottom: 40px; }
+  .scroll-cue { display: none; }
+}
